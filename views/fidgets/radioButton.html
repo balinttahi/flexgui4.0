@@ -1,0 +1,31 @@
+﻿<perfect-scrollbar style="width:{{fidget.properties.width}}px; height:{{fidget.properties.height}}px;"
+                   class="scroller perfectScrollBar"
+                   show-perfect-scroll-bar
+                   wheel-propagation="true"
+                   wheel-speed="10"
+                   min-scrollbar-length="20"
+                   ng-click="onClick(fidget, fidget.properties.onClick, $event)">
+    <table style="border-collapse:collapse; padding: 0px;">
+        <tr ng-repeat="option in fidget.properties.options.split(',')" ng-click="setValue(fidget, option)" style="font-family: {{fidget.properties.font || 'inherit'}}; font-size: {{fidget.properties.fontSize}}px; vertical-align: middle">
+            <td style="vertical-align: middle;">
+                <div class="radioMark">
+                    <div class="checked" ng-if="option == fidget.properties.value"></div>
+                </div>
+            </td>
+            <td style="color: {{fidget.properties.fontColor}}">
+                {{option}}
+            </td>
+        </tr>
+    </table>
+</perfect-scrollbar>
+
+<style>
+    #{{fidget.id}} .radioMark{
+        width: {{fidget.properties.fontSize}}px;
+        height: {{fidget.properties.fontSize}}px;
+        border-radius:{{fidget.properties.fontSize / 2}}px;
+    }
+</style>
+
+
+

@@ -1,0 +1,13 @@
+<table class="checkbox" style="width: {{fidget.properties.width}}px; height: {{fidget.properties.height}}px; display: table-cell; vertical-align: middle; text-align: center;">
+    <tr  ng-click="onClick(fidget, fidget.properties.onClick)">
+        <td>
+            <div class="checkbox">
+                <input type="checkbox" id="chk_{{fidget.id}}" ng-model="fidget.properties.value">
+                <label for="chk_{{fidget.id}}"></label>
+            </div>
+        </td>
+        <td style="color: {{fidget.properties.fontColor}}; font-family: {{fidget.properties.font || 'inherit'}}; font-size: {{fidget.properties.fontSize}}px; white-space: nowrap; padding-left: 10px;">
+            {{fidget.properties.text}}
+        </td>
+    </tr>
+</table>

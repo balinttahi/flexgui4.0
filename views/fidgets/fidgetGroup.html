@@ -1,0 +1,15 @@
+﻿<div style="width: {{fidget.properties.width}}px; height: {{fidget.properties.height}}px; opacity: {{editHandler.activeContainer == fidget && !editHandler.inResize ? 0.5 : 1}}; border: {{fidget.properties.borderWidth}}px solid {{fidget.properties.borderColor}};" class="fidgetgroup"
+     
+     ng-click="onClick(fidget, fidget.properties.onClick)"
+     ng-controller="fidgetGroupCtrl"
+     ng-init="initGroup(fidget)">
+    <div style="top: 0px; left: 0px; position: relative;">
+        <div fg-fidget-repeater fidgets="fidget.fidgets" />
+    </div>
+</div>
+
+<style>
+    #{{fidget.id}} > div{
+                      background: {{colorPickerHandler.getRGBAString(colorPickerHandler.convertHex(fidget.properties.color, fidget.properties.opacity * 100))}};
+                  }
+</style>

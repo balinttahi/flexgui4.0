@@ -1,0 +1,17 @@
+﻿<div 
+     ng-click="onClick(fidget, fidget.properties.onClick)"
+     ng-init="initImage(fidget)"
+     style="height: {{fidget.properties.height}}px; width:{{fidget.properties.width}}px; position:relative; overflow: hidden;">
+
+    <div class="{{fidget.properties.scale}}"
+         style="background-image: url({{imageUrl}}); background-position: center; background-repeat: no-repeat; width: 100%; height: 100%;">
+        <img src="{{fidget.properties.value}}"
+             style="display: none"
+             onload="if (this.parentNode.className.indexOf('imageNotFound') != -1) { var originalClass = this.parentNode.className.substring(0, this.parentNode.className.indexOf(' ')); this.parentNode.className = originalClass; }"
+             onerror="if (this.parentNode.className.indexOf('imageNotFound') == -1) this.parentNode.className += ' imageNotFound';" />
+    </div>
+
+    <div class="overlayer">
+
+    </div>
+</div>
