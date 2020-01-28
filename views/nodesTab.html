@@ -1,7 +1,7 @@
 ﻿<!--Search box-->
 <div class="input-group floatRight interfacesSearchBox">
-    <input type="text" class="form-control" placeholder="{{localization.currentLocal.settings.tabs.nodes.search}}" ng-model="settings.searchString">
-    <button type="button" class="btn btn-default form-control-feedback" ng-click="settings.setSearchString('')" ng-if="settings.searchString != ''">{{localization.currentLocal.buttons.clear}}</button>
+    <input type="text" class="form-control" placeholder="{{::localization.currentLocal.settings.tabs.nodes.search}}" ng-model="settings.searchString">
+    <button type="button" class="btn btn-default form-control-feedback" ng-click="settings.setSearchString('')" ng-if="settings.searchString != ''">{{::localization.currentLocal.buttons.clear}}</button>
 </div>
 
 <!--Hierarchical search-->
@@ -12,7 +12,7 @@
             ng-model="settings.nodesTabSelectedItem"
             ng-options="nodeName for (nodeName, node) in nodes | orderBy:'nodeName'"></select>
 
-    <h4 ng-if="!settings.nodesTabSelectedItem">{{localization.currentLocal.settings.tabs.nodes.nodeUnselected}}</h4>
+    <h4 ng-if="!settings.nodesTabSelectedItem">{{::localization.currentLocal.settings.tabs.nodes.nodeUnselected}}</h4>
 
     <!--List of interfaces on the node-->
     <div ng-if="settings.nodesTabSelectedItem" class="selectedNode">
@@ -27,13 +27,13 @@
 
 <!--Search results-->
 <div ng-if="settings.searchString.length > 1 && settings.searchInterfaces().length != 0" class="searchResult">
-    <h4>{{localization.currentLocal.settings.tabs.nodes.searchResult}}</h4>
+    <h4>{{::localization.currentLocal.settings.tabs.nodes.searchResult}}</h4>
     <ng-include src="'views/interfaceRepeater.html'"></ng-include>
 </div>
 
 <!--Too short search expression-->
 <div ng-if="settings.searchString.length == 1" class="searchResult">
-    <h4>{{localization.currentLocal.settings.tabs.nodes.tooShortError}}</h4>
+    <h4>{{::localization.currentLocal.settings.tabs.nodes.tooShortError}}</h4>
 </div>
 
 <!--No search result-->

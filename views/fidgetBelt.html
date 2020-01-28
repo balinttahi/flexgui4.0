@@ -1,7 +1,7 @@
 ﻿<perfect-scrollbar class="belt fidgetBelt" style="width: {{::beltWidth}}px;">
     <div class="fidgetHelp" style="height: 120px; pointer-events: initial;" ng-if="helpMessages.show">
         <ng-include src="'views/helpIcon.html'" class="helpIconFidgetBelt" ng-init="help = helpMessages.fidgetBelt; resize = 2;"></ng-include>
-        <span>{{localization.currentLocal.help.label}}</span>
+        <span>{{::localization.currentLocal.help.label}}</span>
     </div>
 
     <!--FidgetTemplates-->
@@ -16,5 +16,5 @@
 </perfect-scrollbar>
 
 <div ng-show="(!editHandler.currentMode || editHandler.currentMode.showBeltOverlayes) && editHandler.selectedFidgets.length > 0 && editHandler.isMouseDown == true" class="beltOverlay belt fidgetBelt" style="width: {{::beltWidth}}px;">
-    <div>{{localization.currentLocal.buttons.remove}}</div>
+    <div>{{::localization.currentLocal.buttons.remove}}</div>
 </div>

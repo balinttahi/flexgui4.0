@@ -1,45 +1,60 @@
 ﻿fidgetGroupCtrl.$inject = ['$http', '$sce', '$scope', '$window', '$location', '$routeParams', '$attrs', 'editorService',
     'popupService', 'deviceService', 'scriptManagerService', 'projectService', 'variableService', 'settingsWindowService',
-    '$timeout', '$rootScope'];
+    '$timeout', '$rootScope', 'colorPickerService'];
 
 function fidgetGroupCtrl($http, $sce, $scope, $window, $location, $routeParams, $attrs, editorService,
     popupService, deviceService, scriptManagerService, projectService, variableService, settingsWindowService,
-    $timeout, $rootScope) {
+    $timeout, $rootScope, colorPickerService) {
 
-    //current fidget is
-    var fid;
+    function updateStyle() {
+        $scope.style = {
+            width: $scope.fidget.properties.width + "px",
+            height: $scope.fidget.properties.height + "px",
+            opacity: editorService.activeContainer == $scope.fidget && !editorService.inResize ? 0.5 : 1,
+            border: $scope.fidget.properties.borderWidth + "px solid " + $scope.fidget.properties.borderColor,
+            background: colorPickerService.getRGBAString(colorPickerService.convertHex($scope.fidget.properties.color, $scope.fidget.properties.opacity * 100)),
+        }
+    }
 
     //hold reference to watchers to be able to remove when it is necesarry
     var watchers = [];
-    $scope.initGroup = function (f) {
+    $scope.initGroup = function () {
+
         //remove existing watchers
         angular.forEach(watchers, function (w) { w(); });
         watchers = [];
 
-        fid = f.id;
+        updateStyle();
 
         //add watchers to be able to calculate the size
-        watchers.push($scope.$watchCollection(function () { return f.fidgets; }, function () {
-            updateFidgets(f);
+        watchers.push($scope.$watchCollection(function () { return $scope.fidget.fidgets; }, function () {
+            updateFidgets($scope.fidget);
         }));
 
         watchers.push($scope.$watchGroup([
-            function () { return f.properties.layout; },
-            function () { return f.properties.width; },
-            function () { return f.properties.height; },
-            function () { return f.fidgets.length; },
-            function () { return f.properties.borderWidth; },
-            function () { return f.properties.margin; }
+            function () { return $scope.fidget.properties.color; },
+            function () { return $scope.fidget.properties.opacity; },
+            function () { return $scope.fidget.properties.borderColor; },
+            function () { return editorService.inResize; },
+            function () { return editorService.activeContainer; }
+        ], function () {
+            updateStyle();
+        }));
+
+        watchers.push($scope.$watchGroup([
+            function () { return $scope.fidget.properties.layout; },
+            function () { return $scope.fidget.properties.width; },
+            function () { return $scope.fidget.properties.height; },
+            function () { return $scope.fidget.fidgets.length; },
+            function () { return $scope.fidget.properties.borderWidth; },
+            function () { return $scope.fidget.properties.margin; },
+            
         ],
             function () {
-                updateFidgets(f);
+                updateStyle();
+                updateFidgets($scope.fidget);
             }));
     }
-
-    //reset fidget to be able to watch
-    $scope.$watch(function () { return projectService.loaded }, function () {
-        $scope.initGroup(projectService.getFidgetById(fid));
-    });
 
     //update child fidgets
     function updateFidgets(fidget) {

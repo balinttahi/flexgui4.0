@@ -4,9 +4,9 @@
         var directive = {
             restrict: 'AEC', 
             template: function (elm, attr) {
-                return "<div class='fidget {{fidget.properties.name}}' ng-if='fidget.template' id='{{fidget.id}}' ng-repeat='fidget in " + attr.fidgets + " track by fidget.id' ng-class=\"{'notSelectable': editHandler.selectableFidgets != null && editHandler.selectableFidgets.indexOf(fidget.id) == -1,  'editModeOn': editHandler.isEditMode, 'hidden': fidget.properties.hidden && !editHandler.isEditMode, 'selected': editHandler.selectedFidgets.indexOf(fidget) >= 0  }\" style=\"left:{{fidget.properties.left}}px; top: {{fidget.properties.top}}px;\">" +
+                return "<div class='fidget {{fidget.properties.name}}' ng-if='fidget.template && !(fidget.properties.hidden && !editHandler.isEditMode)' id='{{fidget.id}}' ng-repeat='fidget in " + attr.fidgets + " track by fidget.id' ng-if=\"!(fidget.properties.hidden && !editHandler.isEditMode)\" ng-class=\"{'notSelectable': editHandler.selectableFidgets != null && editHandler.selectableFidgets.indexOf(fidget.id) == -1,  'editModeOn': editHandler.isEditMode, 'hidden': fidget.properties.hidden && !editHandler.isEditMode, 'selected': editHandler.selectedFidgets.indexOf(fidget) >= 0  }\" style=\"left:{{fidget.properties.left}}px; top: {{fidget.properties.top}}px;\">" +
                            "<div ng-class=\"{'disabled': [false, 'false', 0].indexOf(fidget.properties.enabled) != -1 ,'clickable': !editHandler.isEditMode && [undefined, 'undefined', '', null, 'null'].indexOf(fidget.properties.onClick) == -1, 'selectedFidget': editHandler.selectedFidgets.indexOf(fidget) > -1 && editHandler.isEditMode, 'dragged': editHandler.selectedFidgets.length > 0 && editHandler.isMouseDown && !editHandler.inResize && editHandler.selectedFidgets.indexOf(fidget) > -1 }\">" +
-                                "<ng-include ng-controller='fidgetCtrl' src=\"toTrustedUrl(fidget.template.root + fidget.template.source + '.html')\"></ng-include>" +
+                                "<ng-include ng-controller='fidgetCtrl' ng-init='initFidget(fidget)' src=\"toTrustedUrl(fidget.template.root + fidget.template.source + '.html')\"></ng-include>" +
                            "</div>" +
                        "</div>";
             },
@@ -107,6 +107,8 @@
 .controller('flexGuiCtrl', flexGuiCtrl)
 .controller('propertiesWindowCtrl', propertiesWindowCtrl)
 .controller('fidgetCtrl', fidgetCtrl)
+.controller('inputCtrl', inputCtrl)
+.controller('imageCtrl', imageCtrl)
 .controller('fidgetGroupCtrl', fidgetGroupCtrl)
 .factory('backgroundService', backgroundService)
 .factory('editorService', editorService)
@@ -130,14 +132,14 @@
 .factory('backupService', backupService)
 .factory('iconService', iconService)
 .config(appConfig)
-    .config(['$ocLazyLoadProvider', function ($ocLazyLoadProvider) {
-        $ocLazyLoadProvider.config({
-            modules: [
+.config(['$ocLazyLoadProvider', function ($ocLazyLoadProvider) {
+    $ocLazyLoadProvider.config({
+        modules: [
 
-            ],
-            asyncLoader: $script
-        });
-    }])
+        ],
+        asyncLoader: $script
+    });
+}])
 .run(run);
 
 appConfig.$inject = ['$controllerProvider', '$compileProvider', '$filterProvider', '$provide'];
@@ -170,13 +172,27 @@ function ngFileSelect($parse, projectWindowService) {
 
 run.$inject = ['$rootScope', '$templateCache', '$injector', 'popupService', '$location', '$timeout', '$ocLazyLoad', '$cookies', '$window', 'settingsWindowService', '$sce', 'projectService', 'variableService', 'deviceService'];
 function run($rootScope, $templateCache, $injector, popupService, $location, $timeout, $ocLazyLoad, $cookies, $window, settingsWindowService, $sce, projectService, variableService, deviceService) {
-
     if (!$rootScope.settingsTabs) $rootScope.settingsTabs = [];
     if (!$rootScope.screenAddons) $rootScope.screenAddons = [];
 
+    //$rootScope.frameLimit = Number.MAX_SAFE_INTEGER;
+
+    ////limit UI refresh on mobiles to save resources
+    //var scopePrototype = Object.getPrototypeOf($rootScope);
+    //var oldDigest = scopePrototype.$digest;
+    //var lastDigest = Date.now();
+    //scopePrototype.$digest = function $digest() {
+    //    var millis = (Date.now() - lastDigest);
+
+    //    if (millis > 100 || $rootScope.frameLimit === Number.MAX_SAFE_INTEGER) {
+    //        oldDigest.apply(this, arguments);
+    //        lastDigest = Date.now();
+    //    }
+    //};
+
     $rootScope.mirrorMode = {};
     $rootScope.currentUserId = "user_" + variableService.guid();
-    projectService.appVersion = "1.9.8";
+    projectService.appVersion = "2.0.0";
 
     //set ROS address with query string
     var queryString = $location.search();

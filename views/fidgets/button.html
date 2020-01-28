@@ -1,4 +1,4 @@
 <button type="button" class="btn btn-default"
-        style="width: {{fidget.properties.width}}px; min-height: {{fidget.properties.height}}px; font-family: {{fidget.properties.font || 'inherit'}} !important; font-size: {{fidget.properties.fontSize}}px; {{fidget.properties.color ? 'color: ' + fidget.properties.color + ' !important' : ''}}"
-        
-        ng-click="onClick(fidget, fidget.properties.onClick)" ng-bind-html="fidget.properties.text"></button>
+        ng-style="style"
+        style="color: {{fidgetStyles.button.fontcolor}} !important"
+        ng-click="onClick(fidget, $event)" ng-bind-html="fidget.properties.text"></button>

@@ -1,6 +1,6 @@
 ﻿<div style="width: {{fidget.properties.width}}px; height: {{fidget.properties.height}}px; display: table-cell; vertical-align: middle; text-align: center;" class="gauge">
     
-    <div  ng-click="onClick(fidget, fidget.properties.onClick)">
+    <div  ng-click="onClick(fidget, $event)">
 
         <input jg-knob
                type="number"

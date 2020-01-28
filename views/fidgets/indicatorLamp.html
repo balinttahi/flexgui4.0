@@ -1,28 +1,11 @@
-﻿<div style="width: {{fidget.properties.width}}px; height: {{fidget.properties.height}}px;" 
+﻿<div ng-style="style.div" 
      ng-init="initIndicatorLamp(fidget)"
      class="indicatorLamp" 
-     
-     ng-click="onClick(fidget, fidget.properties.onClick)">
-    <style>
-        #{{fidget.id}} .lamp{
-                           border-width: {{size * 0.075}}px;
-                       }
-
-        #{{fidget.id}} .on{
-                           background-color: {{fidget.properties.onColor}};
-                       }
-
-        #{{fidget.id}} .off{
-                           background-color: {{fidget.properties.offColor}};
-                       }
-    </style>
+     ng-click="onClick(fidget, $event)">
     
     <style ng-if="fidget.properties.blinking == true">
-        #{{fidget.id}} .blink_me {
-            -webkit-animation-name: blinker;
+        #{{fidget.id}} .blinking {
             -webkit-animation-duration: {{1 / fidget.properties.blinkFrequency}}s;
-            -webkit-animation-timing-function: linear;
-            -webkit-animation-iteration-count: infinite;
         }
 
         @-webkit-keyframes blinker {  
@@ -32,12 +15,11 @@
         }
     </style>
 
-    <div style="height: {{size}}px; width: {{size}}px; float: left;">
-        <div class="lamp">
-            <div class="on blink_me bulb" ng-if="[true, 1, 'true', '1'].indexOf(fidget.properties.value) != -1"></div>
-            <div class="off blink_me bulb" ng-if="[false, 0, 'false', '0'].indexOf(fidget.properties.value) != -1"></div>
+    <div ng-style="style.lampContainer">
+        <div class="lamp" ng-style="style.lamp">
+            <div ng-class="{'blinking': fidget.properties.blinking == true }" class="blink_me bulb" ng-style="style.bulb"></div>
         </div>
     </div>
-    <div style="height: {{size}}px; line-height: {{size}}px; padding-left: {{size + 5}}px; color: {{fidget.properties.fontColor}}; white-space: nowrap;" ng-bind-html="fidget.properties.text">
+    <div ng-style="style.text" ng-bind-html="fidget.properties.text">
     </div>
 </div>

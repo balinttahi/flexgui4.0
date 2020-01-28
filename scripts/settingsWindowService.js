@@ -14,7 +14,7 @@ function settingsWindowService(projectService, deviceService, popupService, $roo
         },
 
         pinchEnabled: localStorage.getItem("pinchEnabled") == "true" ? true : false,
-
+        zoomControls: localStorage.getItem("zoomControls") == "true" ? true : false,
         offlineMode: localStorage.getItem("offlineMode") == "true" || !localStorage.getItem("offlineMode") ? true : false,
 
         //The visibility of the window
@@ -40,20 +40,60 @@ function settingsWindowService(projectService, deviceService, popupService, $roo
             }
         },
 
-        isStatVisible: localStorage.getItem("statVisible") == "true" ? true : false,
+        isStatVisible: false, //localStorage.getItem("statVisible") == "true" ? true : false,
         showStatistics: function () {
             if (settingsWindowHandler.isStatVisible) {
+                //showAngularStats({
+                //    "position": "topright",
+                //    "digestTimeThreshold": 30,
+                //    "logDigest": false,
+                //    "logWatches": false,
+                //    "htmlId": "angularPerformanceStats",
+                //    "container": "#statistics"
+                //});
+
+                //$("#angularPerformanceStats").css({ right: 140, top: 20 });
+
+                //var stats = new MemoryStats();
+
+                //stats.domElement.style.position = 'fixed';
+                //stats.domElement.style.right = '20px';
+                //stats.domElement.style.top = '170px';
+
+                //document.body.appendChild(stats.domElement);
+
+                //requestAnimationFrame(function rAFloop() {
+                //    stats.update();
+                //    requestAnimationFrame(rAFloop);
+                //});
+
                 showAngularStats({
                     "position": "topright",
                     "digestTimeThreshold": 30,
                     "logDigest": false,
                     "logWatches": false,
                     "htmlId": "angularPerformanceStats",
+                    "container": "#statistics"
                 });
 
-                $("#angularPerformanceStats").css({ right: 140, top: 20 });
+                $("#angularPerformanceStats").css({ right: 20, top: 20 });
+
+                var stats = new MemoryStats();
+
+                stats.domElement.style.position = 'absolute';
+                stats.domElement.style.right = '0px';
+                stats.domElement.style.top = '170px';
+
+                $("#statistics").append(stats.domElement);
+
+                requestAnimationFrame(function rAFloop() {
+                    stats.update();
+                    requestAnimationFrame(rAFloop);
+                });
+
             } else {
                 showAngularStats(false);
+                $("#statistics").html('');
             }
 
             localStorage.setItem("statVisible", settingsWindowHandler.isStatVisible);
@@ -92,7 +132,9 @@ function settingsWindowService(projectService, deviceService, popupService, $roo
         setScreenBeltShow: function () {
             localStorage.setItem("forceScreenBeltShow", this.forceScreenBeltShow);
         },
-
+        setZoomControls: function () {
+            localStorage.setItem("zoomControls", this.zoomControls);
+        },
         loadLocalStorage: function () {
             this.setViewScale(localStorage.getItem("viewScale") || 1.0);
         },

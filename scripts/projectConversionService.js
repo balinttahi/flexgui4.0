@@ -360,6 +360,16 @@ function projectConversionService($rootScope, popupService) {
         }
     }
 
+    serv.list[17] = {
+        from: "1.9.8",
+        to: "2.0.0",
+        action: function (project) {
+            popupService.show("Can't fully upgrade the current project. Please manually adjust the init script to return an object and use @projectVariables.<property> formula to access the variables from the screens.");
+            project.appVersion = this.to;
+            return project;
+        }
+    }
+
     var loops = 0;
 
     serv.convert = function (project, toVersion) {

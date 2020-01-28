@@ -261,7 +261,8 @@
             }
 
             // general variables
-            var bodyEl = angular.element(document.body);
+            //var bodyEl = angular.element(document.body);
+            var bodyEl = angular.element(opts.container ? document.querySelector(opts.container) : document.body);
             var noDigestSteps = 0;
 
             // add the DOM element

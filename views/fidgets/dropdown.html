@@ -1,12 +1,12 @@
 ﻿<div class="dropdown"
-     ng-click="onClick(fidget, fidget.properties.onClick)">
+     ng-click="onClick(fidget, $event)">
     <select class="form-control"
             ng-model="fidget.properties.value"
-            style="width: {{fidget.properties.width}}px; height: {{fidget.properties.height}}px;color:{{fidget.properties.fontColor}};font-family: {{fidget.properties.font || 'inherit'}}; font-size: {{fidget.properties.fontSize}}px;"
+            ng-style="style.list"
             ng-options="option for option in fidget.properties.options.split(',')"></select>
 
     <div class="overLayer"
-         style="width: {{fidget.properties.width - 20}}px; height: {{fidget.properties.height - 4}}px;color:{{fidget.properties.fontColor}};font-family: {{fidget.properties.font || 'inherit'}}; font-size: {{fidget.properties.fontSize}}px;">
+         ng-style="style.overlayer">
         <div>
             <div>
                 {{fidget.properties.value}}

@@ -108,7 +108,13 @@ function projectService($rootScope, enumService, fidgetService, popupService, $l
                 adminEnabled: project.adminEnabled,
                 clientId: $rootScope.currentUserId,
                 projectVersion: project.localVersion,
-                password: project.password
+                password: project.password,
+                rosSettings: {
+                    ip: $rootScope.device.ip,
+                    port: $rootScope.device.port,
+                    secure: $rootScope.device.secure == true,
+                    enabled: $rootScope.settings.offlineMode == false
+                }
             }
 
             //add capability to add new parameters to the get from addons
@@ -424,11 +430,17 @@ function projectService($rootScope, enumService, fidgetService, popupService, $l
         },
 
         //runs the initscript 
-        runInit: function () {
+        runInit: function (script) {
+            script = script || project.initScript;
+
             fidgetService.scriptDict = {};
 
             try {
-                eval(scriptManagerService.compile(project.initScript));
+                var projectVariables = eval('(function() {' + scriptManagerService.compile(script) + '}())');
+                //console.log(projectVariables);
+                if (projectVariables) {
+                    variableService.friendlyCache["projectVariables"] = projectVariables;
+                }
             }
             catch (ex) {
                 popupService.show(localization.currentLocal.settings.tabs.initScript.initException + ": " + ex.message, popupService.types.error);
@@ -721,6 +733,11 @@ function projectService($rootScope, enumService, fidgetService, popupService, $l
             searchInContainer(project.currentScreen);
 
             return f;
+        },
+        getFidgetScope: function (fidget) {
+            var scope = angular.element(document.getElementById(fidget.id).children[0].children[0]).scope();
+
+            return scope;
         }
     };
 

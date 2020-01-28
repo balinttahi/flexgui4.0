@@ -15,12 +15,12 @@
          style="height: 120px;"
          ng-if="editHandler.isAddScreenAvailable() && project.loaded">
         <div class="screen addScreen" style="height: 85px; line-height: 85px;">+</div>
-        <span style="text-align: center;">{{localization.currentLocal.buttons.addScreen}}</span>
+        <span style="text-align: center;">{{::localization.currentLocal.buttons.addScreen}}</span>
     </div>
 
     <div class="fidgetHelp" style="height: 120px; pointer-events: initial;" ng-if="helpMessages.show">
         <ng-include src="'views/helpIcon.html'" class="helpIconFidgetBelt" ng-init="help = helpMessages.screenBelt; resize = 2;"></ng-include>
 
-        <span>{{localization.currentLocal.help.label}}</span>
+        <span>{{::localization.currentLocal.help.label}}</span>
     </div>
 </perfect-scrollbar>

@@ -27,6 +27,7 @@ function scriptManagerService(popupService, variableService, $timeout, $rootScop
     { from: '#setFunction' },
     { from: '#callFunction' },
     { from: '#callService' },
+    { from: '#init', to: '$rootScope.project.runInit' }
     ],
 
         //adds or modifies a replace 

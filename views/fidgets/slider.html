@@ -31,7 +31,7 @@
                    }
 </style>
 
-<div style="width: {{fidget.properties.width}}px; height: {{fidget.properties.height}}px"  ng-click="onClick(fidget, fidget.properties.onClick)">
+<div style="width: {{fidget.properties.width}}px; height: {{fidget.properties.height}}px"  ng-click="onClick(fidget, $event)">
     <slider orientation="fidget.properties.orientation" 
             ng-model="fidget.properties.value" 
             min="fidget.properties.min" 

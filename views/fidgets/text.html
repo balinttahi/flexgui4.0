@@ -1,5 +1,5 @@
-﻿<div style="width: {{fidget.properties.width}}px; height: {{fidget.properties.height}}px; font-family: {{fidget.properties.font || 'inherit'}}; text-align: {{fidget.properties.textAlign}}; min-height: -webkit-min-content; min-width: -webkit-min-content; font-size: {{fidget.properties.fontSize}}px; color: {{fidget.properties.color}}"
-     
-     ng-click="onClick(fidget, fidget.properties.onClick)">
+﻿<div class="textFidget" 
+     ng-style="style"
+     ng-click="onClick(fidget, $event)">
     <div ng-bind-html="fidget.properties.text"></div>
 </div>

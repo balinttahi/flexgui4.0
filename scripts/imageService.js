@@ -10,7 +10,7 @@ function imageService(deviceService, settingsWindowService, variableService, pop
             imageHandler.scope = scope;
             imageHandler.setSlots();
         },
-
+        cache: [],
         //The visibility of the window
         visible: false,
 

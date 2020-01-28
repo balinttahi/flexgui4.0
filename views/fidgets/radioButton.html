@@ -1,31 +1,25 @@
-﻿<perfect-scrollbar style="width:{{fidget.properties.width}}px; height:{{fidget.properties.height}}px;"
-                   class="scroller perfectScrollBar"
-                   show-perfect-scroll-bar
+﻿<perfect-scrollbar ng-style="style.scroller"
+                   class="scroller perfectScrollBar radioGroup"
+                   wheel-propagation="true" wheel-speed="1"
                    wheel-propagation="true"
                    wheel-speed="10"
                    min-scrollbar-length="20"
-                   ng-click="onClick(fidget, fidget.properties.onClick, $event)">
-    <table style="border-collapse:collapse; padding: 0px;">
-        <tr ng-repeat="option in fidget.properties.options.split(',')" ng-click="setValue(fidget, option)" style="font-family: {{fidget.properties.font || 'inherit'}}; font-size: {{fidget.properties.fontSize}}px; vertical-align: middle">
-            <td style="vertical-align: middle;">
-                <div class="radioMark">
-                    <div class="checked" ng-if="option == fidget.properties.value"></div>
-                </div>
-            </td>
-            <td style="color: {{fidget.properties.fontColor}}">
-                {{option}}
-            </td>
-        </tr>
-    </table>
+                   ng-click="onClick(fidget, $event); lock(fidget);">
+    <di style="border-collapse:collapse; padding: 0px;">
+        <div ng-repeat="option in fidget.properties.options.split(',') track by $index" style="vertical-align: middle; margin: 10px 0">
+            <label class="checkbox"
+                   ng-style="style.checkbox"
+                   ng-click="setValue(fidget, option)">
+                <span ng-style="style.span">{{option}}</span>
+                <input type="radio" name="{{fidget.id}}" ng-checked="option == fidget.properties.value">
+                <span ng-style="style.checkmark" class="checkmark form-control"></span>
+            </label>
+        </div>
+    </di>
 </perfect-scrollbar>
 
 <style>
-    #{{fidget.id}} .radioMark{
-        width: {{fidget.properties.fontSize}}px;
-        height: {{fidget.properties.fontSize}}px;
-        border-radius:{{fidget.properties.fontSize / 2}}px;
-    }
+    #{{fidget.id}} .checkbox .checkmark:after{
+                       zoom: {{((fidget.properties.radioSize) / 25) * 100}}%;
+                   }
 </style>
-
-
-

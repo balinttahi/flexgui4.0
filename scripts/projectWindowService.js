@@ -95,7 +95,7 @@ function projectWindowService($rootScope, $location, projectService, deviceServi
             });
             var json = projectService.toJSON(images, false);
 
-            var fileName = "project" + Date.now() + ".fgproj";
+            var fileName = "project.json";//"project" + Date.now() + ".fgproj";
 
             if ($rootScope.isMobile) {
                 var fileObj;

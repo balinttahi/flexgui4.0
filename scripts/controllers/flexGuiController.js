@@ -61,12 +61,12 @@ function flexGuiCtrl($scope, $window, $location, $routeParams, $sce, $timeout, $
 
         //use constant scale to prevent jumpings caused by the scaled coordinates
         var scale = 0;
-        switch($event.additionalEvent){
+        switch ($event.additionalEvent) {
             case "pinchin":
-                scale = - 0.02;
+                scale = -0.02;
                 break;
             case "pinchout":
-                scale = + 0.02;
+                scale = +0.02;
                 break;
         }
 
@@ -78,33 +78,9 @@ function flexGuiCtrl($scope, $window, $location, $routeParams, $sce, $timeout, $
     //cordova device ready event listener
     document.addEventListener("deviceready", function () {
         $rootScope.isMobile = true;
-        console.log("Online: " + window.navigator.onLine);
+        $rootScope.buildDate = BuildInfo.buildDate;
+        $rootScope.frameLimit = 10;
     }, false);
-
-    if (settingsWindowService.isStatVisible) {
-        showAngularStats({
-            "position": "topright",
-            "digestTimeThreshold": 30,
-            "logDigest": false,
-            "logWatches": false,
-            "htmlId": "angularPerformanceStats",
-        });
-
-        $("#angularPerformanceStats").css({ right: 20, top: 20 });
-
-        var stats = new MemoryStats();
-
-        stats.domElement.style.position = 'fixed';
-        stats.domElement.style.right = '20px';
-        stats.domElement.style.top = '170px';
-
-        document.body.appendChild(stats.domElement);
-
-        requestAnimationFrame(function rAFloop() {
-            stats.update();
-            requestAnimationFrame(rAFloop);
-        });
-    }
 
     //if offline mode, then setup the demo parts
     if (settingsWindowService.offlineMode) {
@@ -113,7 +89,6 @@ function flexGuiCtrl($scope, $window, $location, $routeParams, $sce, $timeout, $
         deviceService.init = function () {
             console.log("Download local project");
             deviceService.connected = true;
-            //projectStorageService.download();
         }
     }
 
@@ -272,4 +247,9 @@ function flexGuiCtrl($scope, $window, $location, $routeParams, $sce, $timeout, $
     $scope.copyHtmlById = function (id) {
         return $("#" + id).text();
     }
+
+    $timeout(function () {
+        $rootScope.hideCover = true;
+        settingsWindowService.showStatistics();
+    }, 2000);
 };

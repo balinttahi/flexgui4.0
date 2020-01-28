@@ -28,6 +28,8 @@ function deviceService($rootScope, historyService, projectService, variableServi
 
         // Updates the list of topics, then calls itself after a delay
         updateRos: function () {
+            console.log("called");
+
             if (!variableService.ros) return;
 
             if (device.nextRosUpdate) {
@@ -76,8 +78,11 @@ function deviceService($rootScope, historyService, projectService, variableServi
                 device.findRemovedInterfaces(pathList, device.services);
 
                 angular.forEach(pathList, function (path) {
-                    // Simpler then Topic, because no type data available, but can be used still.
-                    device.addNewInterface(new device.Service(path));
+
+                    variableService.ros.getServiceType(path, function (type) {
+                        // Simpler then Topic, because no type data available, but can be used still.
+                        device.addNewInterface(new device.Service(path, type));
+                    });
                 });
             });
 
@@ -362,12 +367,13 @@ function deviceService($rootScope, historyService, projectService, variableServi
         },
 
         // Service class for handling service related logic
-        Service: function (path) {
+        Service: function (path, type) {
             // Constructs the base class
             device.Interface(path, this);
             // Helps identifying services
             this.isService = true;
-
+            // Type of the service
+            this.type = type;
             // Calling the service. Results in a callback.
             this.call = function (params, resultCallback) {
                 //Test: nodes["/"].spawn.call({x:0, y:0, theta:0})
@@ -493,8 +499,9 @@ function deviceService($rootScope, historyService, projectService, variableServi
                 }
 
                 this.upToDate = true;
+
                 // Compares the content of the values, to avoid unnecessary ui updates
-                if (JSON.stringify(this.value) != JSON.stringify(message)) {
+                if (!_.isEqual(message, this.value)) {
                     //save the old value
                     var oldValue = angular.copy(this.value);
                     //start overwriting properties
@@ -511,11 +518,14 @@ function deviceService($rootScope, historyService, projectService, variableServi
 
                     //empty script dict
                     fidgetService.scriptDict = {};
-                }
 
-                angular.forEach(Object.keys(this.onChangeFunctions), function (key) {
-                    topic.onChangeFunctions[key](message);
-                })
+                    //call onchange function
+                    angular.forEach(Object.keys(this.onChangeFunctions), function (key) {
+                        topic.onChangeFunctions[key](message);
+                    })
+
+                    //console.log("Updated", this.path);
+                }
             }
 
             angular.forEach(Object.keys(this.deepFriendlyNames), function (key) {
@@ -629,10 +639,12 @@ function deviceService($rootScope, historyService, projectService, variableServi
         // Refreshes the UI if there is a change
         refreshUi: function () {
             if (device.changeOnUi && !device.lockUiChange) {
+                //console.log("Update UI");
                 device.changeOnUi = false;
+                $rootScope.$apply();
             }
 
-            $timeout(device.refreshUi, 200);
+            $timeout(device.refreshUi, 200, false);
         },
 
         // Close connection modal window
@@ -685,7 +697,6 @@ function deviceService($rootScope, historyService, projectService, variableServi
                     device.changeOnUi = true;
 
                     $rootScope.blockMessage = localization.currentLocal.project.loading;
-                    device.refreshUi();
                     device.updateRos();
                 });
 
@@ -906,7 +917,7 @@ function deviceService($rootScope, historyService, projectService, variableServi
     });
 
     //delete script dict in every 5 sec
-    $interval(function () { fidgetService.scriptDict = {}; }, 5000);
+    $interval(function () { fidgetService.scriptDict = {}; }, 5000, 0, false);
 
     //delete changedScripts
     device.changedTopicWatchers = [];
@@ -928,7 +939,8 @@ function deviceService($rootScope, historyService, projectService, variableServi
             var i = w.get() - minIndex;
             w.set(i);
         });
-    }, 5000);
+    }, 5000, 0, false);
 
+    device.refreshUi();
     return device;
 }
